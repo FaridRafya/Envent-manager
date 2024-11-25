@@ -29,5 +29,5 @@ It is an application in which users can create events of various topics and view
 
 ## Authors
 
-- [@2taru](https://www.github.com/2taru)
+- [@FaridRafya](https://github.com/FaridRafya)
 
