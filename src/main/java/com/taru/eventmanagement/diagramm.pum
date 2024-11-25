@@ -1,0 +1,57 @@
+@startuml
+' Classe Event
+class Event {
+    +int eventId
+    +String name
+    +String description
+    +String photoUrl
+    +LocalDateTime dateTime
+    +int maxAttendees
+    +int currentAttendees
+    +boolean isCancelled
+    +LocalDateTime creationDate
+    +User creator
+}
+
+' Classe EventAttendee
+class EventAttendee {
+    +EventAttendeeId id
+    +LocalDateTime registrationDate
+    +String status
+    +Event event
+    +User attendee
+}
+
+' Classe Role
+class Role {
+    +int roleId
+    +String name
+}
+
+' Classe User
+class User {
+    +int userId
+    +String email
+    +String password
+    +String username
+    +String firstName
+    +String lastName
+    +String photoUrl
+    +LocalDateTime registrationDate
+}
+
+' Classe UserRole
+class UserRole {
+    +UserRoleId id
+    +User user
+    +Role role
+}
+
+' Relations entre les classes
+Event "1" -- "0..*" EventAttendee : has
+User "1" -- "0..*" EventAttendee : attends
+Role "1" -- "0..*" UserRole : assigned to
+User "1" -- "0..*" UserRole : has
+Event "1" -- "1" User : creator
+
+@enduml

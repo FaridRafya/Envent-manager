@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Notification d'inscription</title>
+</head>
+<body>
+<h2>Bonjour [[${organizerName}]],</h2>
+<p>Un nouveau participant s'est inscrit à votre événement : <strong>[[${eventName}]]</strong>.</p>
+<p>Voici les détails du participant :</p>
+<ul>
+  <li><strong>Nom :</strong> [[${participantName}]]</li>
+  <li><strong>Email :</strong> [[${participantEmail}]]</li>
+</ul>
+<p>Date de l'événement : <strong>[[${eventDate}]]</strong></p>
+<p>Merci de votre confiance !</p>
+</body>
+</html>

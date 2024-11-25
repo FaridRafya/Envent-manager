@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title>Event List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card img {
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-text {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar input {
+            border: none;
+            flex-grow: 1;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .search-bar button {
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-bar button:hover {
+            background-color: #0056b3;
+        }
+
+        .pagination {
+            gap: 0.5rem;
+        }
+
+        .alert {
+            border-radius: 8px;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+        }
+
+        .card-footer {
+            padding: 0.75rem;
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body layout:fragment="body" class="d-flex flex-column h-100">
+<main class="flex-shrink-0">
+    <!-- Page Content -->
+    <section class="py-4">
+        <div class="container px-4 mt-5">
+            <div th:if="${param.success}" class="alert alert-success">
+                <strong>Success!</strong> Your action was successful.
+            </div>
+            <div class="text-center mb-4">
+                <h1 class="fw-bolder">Discover Events</h1>
+                <p class="text-muted">Find, create, and join events easily!</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar mb-4">
+                <input name="query" type="search" class="form-control" placeholder="Search for events..." />
+                <button class="btn btn-primary" id="button-search" type="submit">Search</button>
+            </div>
+
+            <!-- Events List -->
+            <div class="row">
+                <div th:each="event : ${eventResponse.getContent()}" class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card">
+<!--                        <img class="card-img-top" th:src="${event.photoUrl ?: 'https://dummyimage.com/600x400/ccc/333'}" alt="Event Image" />-->
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${event.name}"></h5>
+                            <p class="card-text text-muted" th:text="'Hosted by: @' + ${event.creator.username}"></p>
+                            <p class="card-text text-muted" th:text="'Date: ' + ${event.dateTime.toLocalDate()}"></p>
+                        </div>
+                        <div class="card-footer">
+                            <a th:href="@{/event/{id}(id=${event.eventId})}" class="btn btn-primary w-100">View Event</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center mt-4">
+                <ul class="pagination">
+                    <li th:if="${eventResponse.pageNo > 0}" class="page-item">
+                        <a class="page-link" th:href="@{/event?pageNo=0}">First</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(0, eventResponse.totalPages - 1)}" class="page-item" th:classappend="${i == eventResponse.pageNo} ? 'active' : ''">
+                        <a class="page-link" th:href="@{/event?pageNo=${i}}" th:text="${i + 1}"></a>
+                    </li>
+                    <li th:if="${eventResponse.pageNo < eventResponse.totalPages - 1}" class="page-item">
+                        <a class="page-link" th:href="@{/event?pageNo=${eventResponse.totalPages - 1}}">Last</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

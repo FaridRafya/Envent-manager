@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Event Manager - Gérez vos événements facilement.">
+    <meta name="author" content="Farid Rafya">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Core theme CSS -->
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Bootstrap core JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Title with placeholders for dynamic values -->
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">EventCraft</title>
+
+    <!-- Custom CSS for professional colors -->
+    <style>
+        body {
+            background-color: #f8f9fa; /* Gris clair */
+        }
+        .navbar, footer {
+            background-color: #343a40; /* Bleu-gris */
+        }
+        .navbar-brand, .nav-link, .footer-text, .link-light {
+            color: #ffffff !important; /* Texte blanc pur */
+        }
+        .navbar-brand:hover, .nav-link:hover, .link-light:hover {
+            color: #0d6efd !important; /* Bleu clair */
+        }
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container px-5">
+        <a class="navbar-brand" th:href="@{/event}">EventCraft</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/about}">About</a>
+                </li>
+                <li sec:authorize="!isAuthenticated()" class="nav-item">
+                    <a class="nav-link" th:href="@{/event}">Events</a>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownEvent" href="#" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">Event</a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownEvent">
+                        <li><a class="dropdown-item" th:href="@{/event}">Events</a></li>
+                        <li><a class="dropdown-item" th:href="@{/event/create}">Create Event</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownProfile" href="#" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">Profile</a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownProfile">
+                        <li><a sec:authorize="!isAuthenticated()" class="dropdown-item"
+                               th:href="@{/login}">Log in</a></li>
+                        <li><a sec:authorize="!isAuthenticated()" class="dropdown-item"
+                               th:href="@{/register}">Register</a></li>
+                        <li><a sec:authorize="isAuthenticated()" class="dropdown-item"
+                               th:href="@{/user/{username}(username=${#authentication.name})}">Profile</a></li>
+                        <li><a sec:authorize="isAuthenticated()" class="dropdown-item"
+                               th:href="@{/logout}">Log out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Body (injection point) -->
+<main style="background-color: #f8f9fa;" layout:fragment="body"></main>
+
+<!-- Footer -->
+<footer class="py-4 mt-auto">
+    <div class="container px-5">
+        <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+            <div class="col-auto text-center text-sm-start">
+                <p class="small text-white footer-text">
+                    This application was created and developed by <strong>Farid Rafya</strong>.
+                </p>
+            </div>
+            <div class="col-auto">
+                <a class="link-light small d-flex align-items-center" th:href="@{/about}">
+                    <span class="me-2">Contact</span>
+                    <i class="bi bi-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
