@@ -70,8 +70,9 @@
                             <a th:if="${user.userId} == ${event.creator.userId}" class="btn btn-danger m-2 flex-fill" th:href="@{/event/{id}/delete(id=${event.eventId})}">Delete</a>
                             <div th:if="${user.userId} != ${event.creator.userId}" class="flex-fill d-flex">
                                 <div th:if="not ${isAttended}" class="flex-fill d-flex">
-                                    <a th:if="${event.currentAttendees} != ${event.maxAttendees} and not ${event.isCancelled}" class="btn btn-success m-2 flex-fill" th:href="@{/event/{id}/attend(id=${event.eventId})}">Attend to this Event</a>
-                                    <a th:if="${event.currentAttendees} == ${event.maxAttendees} or ${event.isCancelled}" class="btn btn-secondary m-2 flex-fill disabled">Attend to this Event</a>
+                                    <a th:if="${event.currentAttendees} != ${event.maxAttendees} and not ${event.isCancelled}"
+                                       class="btn btn-success m-2 flex-fill"
+                                       th:href="@{/pay(eventId=${event.eventId})}">Attend to this Event</a>                                    <a th:if="${event.currentAttendees} == ${event.maxAttendees} or ${event.isCancelled}" class="btn btn-secondary m-2 flex-fill disabled">Attend to this Event</a>
                                 </div>
                                 <a th:if="${isAttended}" class="btn btn-warning m-2 flex-fill" th:href="@{/event/{id}/skip(id=${event.eventId})}">Skip this Event</a>
                             </div>

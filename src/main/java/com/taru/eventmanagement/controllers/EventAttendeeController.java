@@ -2,9 +2,11 @@ package com.taru.eventmanagement.controllers;
 
 import com.taru.eventmanagement.config.SecurityUtil;
 import com.taru.eventmanagement.dto.EventAttendeeDTO;
+import com.taru.eventmanagement.dto.EventDTO;
 import com.taru.eventmanagement.dto.UserDTO;
 import com.taru.eventmanagement.models.EventAttendeeId;
 import com.taru.eventmanagement.services.EventAttendeeService;
+import com.taru.eventmanagement.services.EventService;
 import com.taru.eventmanagement.services.UserService;
 import jakarta.mail.MessagingException;
 import org.springframework.stereotype.Controller;
@@ -20,10 +22,12 @@ public class EventAttendeeController {
 
     private final EventAttendeeService eventAttendeeService;
     private final UserService userService;
+    private final EventService eventService ;
 
-    public EventAttendeeController(EventAttendeeService eventAttendeeService, UserService userService) {
+    public EventAttendeeController(EventAttendeeService eventAttendeeService, UserService userService, EventService eventService) {
         this.eventAttendeeService = eventAttendeeService;
         this.userService = userService;
+        this.eventService = eventService;
     }
 
     @GetMapping("/event/{eventId}/attend")
@@ -31,12 +35,17 @@ public class EventAttendeeController {
             @PathVariable("eventId") int eventId,
             Model model
     ) throws MessagingException {
-
+        // Vérification si l'utilisateur est déjà inscrit ou si l'événement est complet
+        EventDTO event = eventService.getEventById(eventId);
+        if (event.getCurrentAttendees() >= event.getMaxAttendees()) {
+            model.addAttribute("error", "Event is already full.");
+            return "redirect:/event/" + eventId; // Redirection vers la page de l'événement si complet
+        }
         eventAttendeeService.createEventAttendee(eventId, EventAttendeeDTO.builder().status("Attended").build());
 
-        model.addAttribute("isAttended", true);
-
-        return "redirect:/event/%d?success".formatted(eventId);
+        // Redirection vers la page de paiement
+        model.addAttribute("eventId", eventId); // Vous pouvez transmettre l'ID de l'événement pour l'utiliser sur la page de paiement
+        return "redirect:/pay?eventId=" + eventId; // Redirection vers la page de paiement
     }
 
     @GetMapping("/event/{eventId}/skip")
